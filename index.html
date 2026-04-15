@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bakti Prasetyo — Mobile Developer</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #fafafa; --surface: #ffffff; --text: #111111; --muted: #6b7280;
+    --accent: #2563eb; --accent-light: #eff6ff; --border: #e5e7eb; --radius: 12px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,250,250,0.88); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 60px;
+  }
+  .logo { font-weight: 700; font-size: 1rem; letter-spacing: -0.5px; color: var(--text); text-decoration: none; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.9rem; transition: color .2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  section { padding: 100px 5%; max-width: 1100px; margin: 0 auto; }
+
+  /* HERO */
+  #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 60px; }
+  .hero-tag {
+    display: inline-block; background: var(--accent-light); color: var(--accent);
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 99px; margin-bottom: 20px;
+  }
+  .hero-name { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 16px; }
+  .hero-name span { color: var(--accent); }
+  .hero-sub { font-size: clamp(1rem, 2vw, 1.15rem); color: var(--muted); max-width: 560px; margin-bottom: 36px; }
+  .btn { display: inline-block; padding: 12px 28px; background: var(--accent); color: #fff; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: opacity .2s, transform .2s; }
+  .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); margin-left: 12px; }
+
+  /* ABOUT */
+  .about-grid { display: grid; grid-template-columns: auto 1fr; gap: 60px; align-items: start; }
+  .avatar { width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, #dbeafe, #bfdbfe); display: flex; align-items: center; justify-content: center; font-size: 5rem; flex-shrink: 0; }
+  .section-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .section-title { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 16px; }
+  .about-text { color: var(--muted); margin-bottom: 24px; font-size: 0.96rem; }
+  .skills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill-tag { background: var(--accent-light); color: var(--accent); font-size: 0.8rem; font-weight: 500; padding: 4px 12px; border-radius: 99px; }
+
+  /* EXPERIENCE */
+  .exp-list { margin-top: 36px; }
+  .exp-item { display: grid; grid-template-columns: 36px 1fr; gap: 0 16px; margin-bottom: 28px; position: relative; }
+  .exp-dot { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; margin-top: 6px; position: relative; z-index: 1; justify-self: center; }
+  .exp-item:not(:last-child) .exp-dot::after { content:''; position: absolute; left: 50%; top: 14px; width: 2px; height: calc(100% + 16px); background: var(--border); transform: translateX(-50%); }
+  .exp-role { font-weight: 700; font-size: 0.97rem; }
+  .exp-company { color: var(--accent); font-size: 0.88rem; font-weight: 500; }
+  .exp-meta { color: var(--muted); font-size: 0.8rem; margin: 3px 0 8px; }
+  .exp-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.7; }
+  .exp-desc li { margin-left: 16px; margin-bottom: 3px; }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 40px; }
+  .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; transition: transform .2s, box-shadow .2s; }
+  .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.07); }
+  .project-icon { font-size: 2rem; margin-bottom: 14px; }
+  .project-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 8px; }
+  .project-desc { color: var(--muted); font-size: 0.88rem; margin-bottom: 16px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .project-tag { background: #f3f4f6; color: var(--muted); font-size: 0.75rem; padding: 3px 10px; border-radius: 99px; }
+  .project-link { font-size: 0.85rem; color: var(--accent); text-decoration: none; font-weight: 500; }
+  .project-link:hover { text-decoration: underline; }
+
+  /* BLOG */
+  .blog-list { margin-top: 40px; }
+  .blog-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 22px 0; border-bottom: 1px solid var(--border); gap: 20px; transition: padding-left .2s; }
+  .blog-item:hover { padding-left: 6px; }
+  .blog-item:last-child { border-bottom: none; }
+  .blog-title { font-weight: 600; font-size: 0.97rem; margin-bottom: 4px; }
+  .blog-excerpt { color: var(--muted); font-size: 0.87rem; }
+  .blog-date { color: var(--muted); font-size: 0.8rem; white-space: nowrap; flex-shrink: 0; }
+
+  /* CONTACT */
+  #contact { text-align: center; }
+  .contact-sub { color: var(--muted); max-width: 480px; margin: 0 auto 40px; font-size: 0.97rem; }
+  .contact-form { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; text-align: left; }
+  .contact-form input, .contact-form textarea { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.92rem; background: var(--surface); color: var(--text); transition: border-color .2s; outline: none; }
+  .contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent); }
+  .contact-form textarea { resize: vertical; min-height: 130px; }
+  .contact-form button { padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: opacity .2s; }
+  .contact-form button:hover { opacity: 0.88; }
+  .socials { display: flex; justify-content: center; gap: 20px; margin-top: 36px; flex-wrap: wrap; }
+  .social-link { display: flex; align-items: center; gap: 6px; color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color .2s; }
+  .social-link:hover { color: var(--accent); }
+
+  /* EDU */
+  .edu-card { display: flex; align-items: center; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; max-width: 480px; margin-top: 32px; }
+  .edu-icon { font-size: 2.2rem; flex-shrink: 0; }
+  .edu-school { font-weight: 700; font-size: 0.97rem; }
+  .edu-detail { color: var(--muted); font-size: 0.85rem; }
+
+  footer { text-align: center; padding: 28px; font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--border); }
+
+  @media (max-width: 700px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .avatar { width: 140px; height: 140px; font-size: 3.5rem; }
+    .btn-ghost { margin-left: 0; margin-top: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#hero">Bakti Prasetyo</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <span class="hero-tag">📍 Klaten, Central Java, Indonesia</span>
+  <h1 class="hero-name">Hi, I'm <span>Bakti</span><br/>Mobile Developer.</h1>
+  <p class="hero-sub">Flutter & Android developer specializing in building responsive, scalable, and user-friendly mobile apps — from concept to deployment.</p>
+  <div>
+    <a href="#projects" class="btn">View My Work</a>
+    <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+      <div class="avatar">👨‍💻</div>
+    </div>
+    <div>
+      <p class="section-label">About Me</p>
+      <h2 class="section-title">Building great apps,<br/>one widget at a time</h2>
+      <p class="about-text">
+        Experienced mobile application developer specializing in Android development using the Flutter framework.
+        Skilled in designing, developing, and implementing responsive, scalable, and user-friendly mobile applications.
+        Proficient in leveraging Flutter to create engaging UIs, integrate APIs, and optimize app performance —
+        managing the full app development lifecycle from concept to release.
+      </p>
+      <div class="skills">
+        <span class="skill-tag">Flutter</span>
+        <span class="skill-tag">Dart</span>
+        <span class="skill-tag">Android</span>
+        <span class="skill-tag">Bloc</span>
+        <span class="skill-tag">RESTful API</span>
+        <span class="skill-tag">Figma</span>
+        <span class="skill-tag">Firebase</span>
+        <span class="skill-tag">Git</span>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="exp-list">
+        <p class="section-label" style="margin-top:32px;">Experience</p>
+
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div>
+            <div class="exp-role">Mobile Developer</div>
+            <div class="exp-company">Alpha Red Solutions</div>
+            <div class="exp-meta">May 2025 – Present · 1 year · Malaysia</div>
+            <ul class="exp-desc">
+              <li>Built & maintained cross-platform apps with Flutter (Dart) for Android & iOS</li>
+              <li>Developed 10+ UIs based on Figma designs with responsive layouts</li>
+              <li>Integrated RESTful APIs with robust data parsing & error handling</li>
+              <li>Applied state management using Bloc</li>
+              <li>Debugged & resolved issues to improve performance and stability</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div>
+            <div class="exp-role">Mobile Developer</div>
+            <div class="exp-company">GolekTruk</div>
+            <div class="exp-meta">Apr 2022 – May 2023 · 1 yr 2 mos · Semarang, Central Java</div>
+            <ul class="exp-desc">
+              <li>Main project: GolekTruk app</li>
+              <li>Transformed Figma mockups into responsive Flutter UIs for cross-platform compatibility</li>
+              <li>Developed core app flow logic and component interactions</li>
+              <li>Fixed bugs and improved overall app stability</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div>
+            <div class="exp-role">Android Developer</div>
+            <div class="exp-company">Dinas Komunikasi dan Informatika Kabupaten Klaten</div>
+            <div class="exp-meta">Sep 2021 – Dec 2021 · 4 mos · Klaten, Central Java</div>
+            <ul class="exp-desc">
+              <li>Created app prototypes using Figma (wireframes & interactive flows)</li>
+              <li>Implemented Figma designs into Flutter apps using responsive widgets</li>
+              <li>Developed core application logic and functionality</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDUCATION -->
+      <p class="section-label" style="margin-top:36px;">Education</p>
+      <div class="edu-card">
+        <div class="edu-icon">🎓</div>
+        <div>
+          <div class="edu-school">Yogyakarta State University</div>
+          <div class="edu-detail">Bachelor's Degree · Informatics · GPA 3.7</div>
+          <div class="edu-detail">2019 – 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label">My Work</p>
+  <h2 class="section-title">Featured Projects</h2>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-icon">🚛</div>
+      <div class="project-title">GolekTruk</div>
+      <p class="project-desc">A logistics mobile app connecting truck owners and shippers. Built responsive UIs from Figma designs with full cross-platform support.</p>
+      <div class="project-tags">
+        <span class="project-tag">Flutter</span>
+        <span class="project-tag">Dart</span>
+        <span class="project-tag">REST API</span>
+      </div>
+      <a href="#" class="project-link">View Project →</a>
+    </div>
+    <div class="project-card">
+      <div class="project-icon">📱</div>
+      <div class="project-title">Klaten Gov App</div>
+      <p class="project-desc">Government mobile app prototype for Dinas Kominfo Klaten. Designed with Figma and implemented using Flutter for a responsive interface.</p>
+      <div class="project-tags">
+        <span class="project-tag">Flutter</span>
+        <span class="project-tag">Figma</span>
+        <span class="project-tag">Android</span>
+      </div>
+      <a href="#" class="project-link">View Project →</a>
+    </div>
+    <div class="project-card">
+      <div class="project-icon">🔴</div>
+      <div class="project-title">Alpha Red App</div>
+      <p class="project-desc">Cross-platform mobile application developed at Alpha Red Solutions using Flutter, Bloc state management, and RESTful API integration.</p>
+      <div class="project-tags">
+        <span class="project-tag">Flutter</span>
+        <span class="project-tag">Bloc</span>
+        <span class="project-tag">REST API</span>
+        <span class="project-tag">iOS & Android</span>
+      </div>
+      <a href="#" class="project-link">View Project →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog">
+  <p class="section-label">Writing</p>
+  <h2 class="section-title">Latest from the Blog</h2>
+  <div class="blog-list">
+    <div class="blog-item">
+      <div>
+        <div class="blog-title">Why I Use Bloc for State Management in Flutter</div>
+        <div class="blog-excerpt">A practical guide to Bloc vs Riverpod vs Provider — and why Bloc wins for large-scale apps.</div>
+      </div>
+      <div class="blog-date">Mar 2025</div>
+    </div>
+    <div class="blog-item">
+      <div>
+        <div class="blog-title">From Figma to Flutter: My Design-to-Code Workflow</div>
+        <div class="blog-excerpt">How I translate Figma mockups into pixel-perfect, responsive Flutter UIs efficiently.</div>
+      </div>
+      <div class="blog-date">Jan 2025</div>
+    </div>
+    <div class="blog-item">
+      <div>
+        <div class="blog-title">Integrating RESTful APIs in Flutter the Right Way</div>
+        <div class="blog-excerpt">Best practices for API integration, error handling, and data parsing in Flutter apps.</div>
+      </div>
+      <div class="blog-date">Oct 2024</div>
+    </div>
+    <div class="blog-item">
+      <div>
+        <div class="blog-title">Cross-Platform Mobile Dev: Lessons from the Field</div>
+        <div class="blog-excerpt">What I've learned building apps for both Android and iOS at Alpha Red Solutions.</div>
+      </div>
+      <div class="blog-date">Jul 2024</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Contact</p>
+  <h2 class="section-title">Let's Work Together</h2>
+  <p class="contact-sub">Have a project in mind or want to collaborate? Drop me a message — I usually reply within 24 hours.</p>
+  <div class="contact-form">
+    <input type="text" placeholder="Your Name"/>
+    <input type="email" placeholder="Your Email"/>
+    <textarea placeholder="Your Message"></textarea>
+    <button type="button">Send Message</button>
+  </div>
+  <div class="socials">
+    <a href="https://id.linkedin.com/in/bakti-prasetyo" target="_blank" class="social-link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://github.com/" target="_blank" class="social-link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      GitHub
+    </a>
+    <a href="mailto:bakti@email.com" class="social-link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Email
+    </a>
+  </div>
+</section>
+
+<footer>© 2025 Bakti Prasetyo · Mobile Developer · Flutter & Android</footer>
+
+</body>
+</html>
